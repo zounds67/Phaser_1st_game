@@ -1,0 +1,199 @@
+{
+  "format": "game-builder-github-progress",
+  "schemaVersion": 1,
+  "courseId": "phaser-first-game-v1",
+  "courseTitle": "Phaser’s First Game",
+  "progress": {
+    "drafts": {
+      "start": "// Build the game from the settings in config.\nvar game = new Phaser.Game(config);",
+      "load-sky": "this.load.image('sky', 'assets/sky.png');",
+      "paint-sky": "this.add.image(400, 300, 'sky');",
+      "load-rest": "this.load.image('ground', 'assets/platform.png');\n\n// Load 'star' and 'bomb' the same way.\nthis.load.image('star', 'assets/star.png');\nthis.load.image('bomb', 'assets/bomb.png');\n\n// Load 'dude' as a spritesheet. Its settings need frameWidth: 32 and frameHeight: 48\n this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });\n",
+      "ground": "platforms = this.physics.add.staticGroup();\n\n// Create the ground here.\nplatforms.create(400, 568, 'ground').setScale(2).refreshBody();",
+      "ledges": "// Three ledges to jump on.\nplatforms.create(600, 400, 'ground')\nplatforms.create(50, 250, 'ground')\nplatforms.create(750, 220, 'ground')",
+      "player": "// Make player a physics sprite at (100, 450) using the 'dude' picture.\nplayer = this.physics.add.sprite(100, 450, 'dude')\n\n// A little bounce: 0.2\nplayer.setBounce(0.2)\n// Keep the player on the screen.\nplayer.setCollideWorldBounds(true)",
+      "collide": "// Make player and platforms bump into each other.\nthis.physics.add.collider(player, platforms);",
+      "animations": "this.anims.create({\n    key: 'left',\n    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),\n    frameRate: 10,\n    repeat: -1\n});\n\nthis.anims.create({\n    key: 'turn',\n    frames: [ { key: 'dude', frame: 4 } ],\n    frameRate: 20\n});\n// Make the 'right' animation: frames 5 to 8.\n\nthis.anims.create({\n    key: 'right',\n    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),\n    frameRate: 10,\n    repeat: -1\n});\n",
+      "keys": "// Store the arrow keys in cursors.\ncursors = this.input.keyboard.createCursorKeys()\n",
+      "walk": "if (cursors.left.isDown)\n{\n    player.setVelocityX(-160)\n    player.anims.play('left', true)\n\n}\nelse if (cursors.right.isDown)\n{\n    player.setVelocityX(160)\n    player.anims.play('right', true)\n}\nelse\n{\n    player.anims.play('turn', false)\n    player.setVelocityX(0)\n\n}",
+      "jump": "// Jump only when up is pressed AND the dude is standing on something.\n if (cursors.up.isDown && player.body.touching.down == true)\n{\n     player.setVelocityY(-330)\n}\n\n",
+      "stars": "stars = this.physics.add.group({\n    key: 'star',\n    repeat: 11,\n    setXY: { x: 12, y: 0, stepX: 70 }\n});\n\nstars.children.iterate(function (child) {\n\n    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));\n\n});\n\n// Make the stars land on the platforms.\nthis.physics.add.collider(stars, platforms);\n\n",
+      "overlap": "// When player touches stars, call collectStar.\nthis.physics.add.overlap(player, stars, collectStar, null, this);\n",
+      "collect": "// star is the one star that was touched.\nstar.disableBody(true, true)\n",
+      "score-label": "// Make the score label in the top-left corner.\nscoreText = this.add.text(16, 16, 'score: 0', {fontSize: '32px', fill: '#000'})",
+      "score-points": "// Add 10 points.\nscore += 10\n// Show the new score.\nscoreText.setText('Score: ' + score)\n",
+      "bombs": "bombs = this.physics.add.group();\nthis.physics.add.collider(bombs, platforms);\n\n// 2. When the player hits a bomb, call hitBomb: Mission 14’s five inputs, as a collider.\nthis.physics.add.collider(player, bombs, hitBomb, null, this)",
+      "game-over": "// Freeze the physics.\nthis.physics.pause()\n// Turn the player red.\nplayer.setTint(0xff0000)\n// Face forward.\nplayer.anims.play('turn')\n// Flip the gameOver switch.\ngameOver = true",
+      "new-wave": "if (stars.countActive(true) === 0)\n{\n    //  1. A new batch of stars to collect\n    stars.children.iterate(function (child) {\n\n        // Bring each child star back at (child.x, 0) here.\n        child.enableBody(true, child.x, 0, true, true)\n    });\n\n    var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);\n\n    //  2. A new bomb at (x, 16)\n    var bomb = bombs.create(x, 16, 'bomb');\n    bomb.setBounce(1)\n    bomb.setCollideWorldBounds(true)\n    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)\n}"
+    },
+    "completed": [
+      "start",
+      "load-sky",
+      "paint-sky",
+      "load-rest",
+      "ground",
+      "ledges",
+      "player",
+      "collide",
+      "animations",
+      "keys",
+      "walk",
+      "jump",
+      "stars",
+      "overlap",
+      "collect",
+      "score-label",
+      "score-points",
+      "bombs",
+      "game-over",
+      "new-wave"
+    ],
+    "examples": [],
+    "hints": {
+      "start": 2,
+      "load-sky": 2,
+      "paint-sky": 2,
+      "load-rest": 3,
+      "ground": 1,
+      "player": 3,
+      "collide": 3,
+      "animations": 3,
+      "keys": 2,
+      "stars": 3,
+      "overlap": 3,
+      "score-label": 3,
+      "bombs": 3,
+      "game-over": 1
+    },
+    "solved": {
+      "start": "self",
+      "load-sky": "self",
+      "paint-sky": "self",
+      "load-rest": "self",
+      "ground": "self",
+      "ledges": "self",
+      "player": "self",
+      "collide": "self",
+      "animations": "self",
+      "keys": "self",
+      "walk": "self",
+      "jump": "self",
+      "stars": "self",
+      "overlap": "self",
+      "collect": "self",
+      "score-label": "self",
+      "score-points": "self",
+      "bombs": "self",
+      "game-over": "self",
+      "new-wave": "self"
+    },
+    "stars": {
+      "start": {
+        "own": false,
+        "explore": false
+      },
+      "load-sky": {
+        "own": false,
+        "explore": false
+      },
+      "paint-sky": {
+        "own": false,
+        "explore": false
+      },
+      "load-rest": {
+        "own": false,
+        "explore": false
+      },
+      "ground": {
+        "own": true,
+        "explore": false
+      },
+      "ledges": {
+        "own": true,
+        "explore": false
+      },
+      "player": {
+        "own": false,
+        "explore": false
+      },
+      "collide": {
+        "own": false,
+        "explore": false
+      },
+      "animations": {
+        "own": false,
+        "explore": false
+      },
+      "keys": {
+        "own": false,
+        "explore": false
+      },
+      "walk": {
+        "own": true,
+        "explore": false
+      },
+      "jump": {
+        "own": true,
+        "explore": false
+      },
+      "stars": {
+        "own": false,
+        "explore": false
+      },
+      "overlap": {
+        "own": false,
+        "explore": false
+      },
+      "collect": {
+        "own": true,
+        "explore": false
+      },
+      "score-label": {
+        "own": false,
+        "explore": false
+      },
+      "score-points": {
+        "own": true,
+        "explore": false
+      },
+      "bombs": {
+        "own": false,
+        "explore": false
+      },
+      "game-over": {
+        "own": true,
+        "explore": false
+      },
+      "new-wave": {
+        "own": true,
+        "explore": false
+      }
+    },
+    "working": {
+      "start": "// Build the game from the settings in config.\nvar game = new Phaser.Game(config);",
+      "load-sky": "this.load.image('sky', 'assets/sky.png');",
+      "paint-sky": "this.add.image(400, 300, 'sky');",
+      "load-rest": "this.load.image('ground', 'assets/platform.png');\n\n// Load 'star' and 'bomb' the same way.\nthis.load.image('star', 'assets/star.png');\nthis.load.image('bomb', 'assets/bomb.png');\n\n// Load 'dude' as a spritesheet. Its settings need frameWidth: 32 and frameHeight: 48\n this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });\n",
+      "ground": "platforms = this.physics.add.staticGroup();\n\n// Create the ground here.\nplatforms.create(400, 568, 'ground').setScale(2).refreshBody();",
+      "ledges": "// Three ledges to jump on.\nplatforms.create(600, 400, 'ground')\nplatforms.create(50, 250, 'ground')\nplatforms.create(750, 220, 'ground')",
+      "player": "// Make player a physics sprite at (100, 450) using the 'dude' picture.\nplayer = this.physics.add.sprite(100, 450, 'dude')\n\n// A little bounce: 0.2\nplayer.setBounce(0.2)\n// Keep the player on the screen.\nplayer.setCollideWorldBounds(true)",
+      "collide": "// Make player and platforms bump into each other.\nthis.physics.add.collider(player, platforms);",
+      "animations": "this.anims.create({\n    key: 'left',\n    frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),\n    frameRate: 10,\n    repeat: -1\n});\n\nthis.anims.create({\n    key: 'turn',\n    frames: [ { key: 'dude', frame: 4 } ],\n    frameRate: 20\n});\n// Make the 'right' animation: frames 5 to 8.\n\nthis.anims.create({\n    key: 'right',\n    frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),\n    frameRate: 10,\n    repeat: -1\n});\n",
+      "keys": "// Store the arrow keys in cursors.\ncursors = this.input.keyboard.createCursorKeys()\n",
+      "walk": "if (cursors.left.isDown)\n{\n    player.setVelocityX(-160)\n    player.anims.play('left', true)\n\n}\nelse if (cursors.right.isDown)\n{\n    player.setVelocityX(160)\n    player.anims.play('right', true)\n}\nelse\n{\n    player.anims.play('turn', false)\n    player.setVelocityX(0)\n\n}",
+      "jump": "// Jump only when up is pressed AND the dude is standing on something.\n if (cursors.up.isDown && player.body.touching.down == true)\n{\n     player.setVelocityY(-330)\n}\n\n",
+      "stars": "stars = this.physics.add.group({\n    key: 'star',\n    repeat: 11,\n    setXY: { x: 12, y: 0, stepX: 70 }\n});\n\nstars.children.iterate(function (child) {\n\n    child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));\n\n});\n\n// Make the stars land on the platforms.\nthis.physics.add.collider(stars, platforms);\n\n",
+      "overlap": "// When player touches stars, call collectStar.\nthis.physics.add.overlap(player, stars, collectStar, null, this);\n",
+      "collect": "// star is the one star that was touched.\nstar.disableBody(true, true)\n",
+      "score-label": "// Make the score label in the top-left corner.\nscoreText = this.add.text(16, 16, 'score: 0', {fontSize: '32px', fill: '#000'})",
+      "score-points": "// Add 10 points.\nscore += 10\n// Show the new score.\nscoreText.setText('Score: ' + score)\n",
+      "bombs": "bombs = this.physics.add.group();\nthis.physics.add.collider(bombs, platforms);\n\n// 2. When the player hits a bomb, call hitBomb: Mission 14’s five inputs, as a collider.\nthis.physics.add.collider(player, bombs, hitBomb, null, this)",
+      "game-over": "// Freeze the physics.\nthis.physics.pause()\n// Turn the player red.\nplayer.setTint(0xff0000)\n// Face forward.\nplayer.anims.play('turn')\n// Flip the gameOver switch.\ngameOver = true",
+      "new-wave": "if (stars.countActive(true) === 0)\n{\n    //  1. A new batch of stars to collect\n    stars.children.iterate(function (child) {\n\n        // Bring each child star back at (child.x, 0) here.\n        child.enableBody(true, child.x, 0, true, true)\n    });\n\n    var x = (player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);\n\n    //  2. A new bomb at (x, 16)\n    var bomb = bombs.create(x, 16, 'bomb');\n    bomb.setBounce(1)\n    bomb.setCollideWorldBounds(true)\n    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20)\n}"
+    },
+    "planSeen": false,
+    "tokens": 7,
+    "streak": 2,
+    "unlocked": 19
+  }
+}
